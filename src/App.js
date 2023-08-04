@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import editor from "./Editor.js";
+import preview from "./Preview.js";
+import store from "./store.js";
+import { updateText } from "./store.js";
+import { Provider, connect } from "react-redux";
+
+function mapStateToProps(state) {
+  return { input: state };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updateText: function (text) {
+      dispatch(updateText(text));
+    },
+  };
+}
+
+const Editor = connect(mapStateToProps, mapDispatchToProps)(editor);
+const Preview = connect(mapStateToProps, null)(preview);
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Editor />
+      <Preview />
+    </Provider>
   );
 }
 
